@@ -1,4 +1,4 @@
-gene," B cells, naive"," Monocytes, CD14+"," Monocytes, CD16+", NK cells," T cells, CD4+, memory TREG"," T cells, CD4+, naive"," T cells, CD4+, naive, stimulated"," T cells, CD4+, naive TREG"," T cells, CD4+, TFH"," T cells, CD4+, Th1_17"," T cells, CD4+, Th17"," T cells, CD4+, Th1"," T cells, CD4+, Th2"," T cells, CD8+, naive"," T cells, CD8+, naive, stimulated"
+gene, B cells_naive, Monocytes_CD14?, Monocytes_CD16?, NK cells, T cells_CD4?_memory TREG, T cells_CD4?_naive, T cells_CD4?_naive_stimulated, T cells_CD4?_naive TREG, T cells_CD4?_TFH, T cells_CD4?_Th1_17, T cells_CD4?_Th17, T cells_CD4?_Th1, T cells_CD4?_Th2, T cells_CD8?_naive, T cells_CD8?_naive_stimulated
 A1BG,,,,,,,,,,,,,-3.579721878,-1.395942062,
 A2M,,,,,,4.539526582,,,3.213814432,,,4.051605077,2.450580486,,
 A2M-AS1,,,,-2.679875647,,,,,,,,,,,
