@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DE Genes with Opposite Directions</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+</head>
+<body>
+  <h2>DE Genes with Opposite Directions Across Cell Types</h2>
+  <p>This table shows genes differentially expressed in opposite directions across immune subsets in SV/HLHS.</p>
+  <table id="oppositeTable" class="display" width="100%"></table>
+
+  <script>
+    $(document).ready(function() {
+      $.get('DE_genes_opposite_directions.csv', function(data) {
+        const rows = data.trim().split('\n').map(row => row.split(','));
+        const headers = rows[0];
+        const body = rows.slice(1);
+        $('#oppositeTable').DataTable({
+          data: body,
+          columns: headers.map(h => ({ title: h })),
+          pageLength: 25,
+          scrollX: true
+        });
+      });
+    });
+  </script>
+</body>
+</html>
