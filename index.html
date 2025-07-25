@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +9,17 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 </head>
 <body>
-  <h2>Differential Gene Expression Across Cell Types</h2>
-  <p>Search by gene symbol or browse the table below. Negative values indicate downregulation; positive values indicate upregulation.</p>
-  <table id="geneTable" class="display" width="100%"></table>
+  <h2>DE Genes with Opposite Directions Across Cell Types</h2>
+  <p>This table shows genes differentially expressed in opposite directions across immune subsets in SV/HLHS.</p>
+  <table id="oppositeTable" class="display" width="100%"></table>
 
   <script>
     $(document).ready(function() {
       $.get('DE_genes_by_celltype.csv', function(data) {
-        const rows = data.split('\n').map(row => row.split(','));
+        const rows = data.trim().split('\n').map(row => row.split(','));
         const headers = rows[0];
         const body = rows.slice(1);
-        $('#geneTable').DataTable({
+        $('#oppositeTable').DataTable({
           data: body,
           columns: headers.map(h => ({ title: h })),
           pageLength: 25,
