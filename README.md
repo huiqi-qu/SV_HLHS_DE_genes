@@ -4,7 +4,7 @@ This repository provides interactive visualizations of differential gene express
 
 The data includes two searchable gene expression tables:
 
-- 🔗 **[Main DE Genes Table](https://huiqi-qu.github.io/SV_HLHS_DE_genes)** — Log₂ fold changes for 6,660 genes across immune cell types  
+- 🔗 **[Main DE Genes Table](https://huiqi-qu.github.io/SV_HLHS_DE_genes/index.html)** — Log₂ fold changes for 6,660 genes across immune cell types
 - 🔗 **[Opposite-Direction DE Genes Table](https://huiqi-qu.github.io/SV_HLHS_DE_genes/opposite.html)** — Subset of 822 genes showing opposite regulation across different cell types
 
 Each table allows users to search by gene name, filter by cell type, and explore expression patterns interactively.
