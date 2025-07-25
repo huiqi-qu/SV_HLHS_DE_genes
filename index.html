@@ -3,27 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <title>Differential Expression by Cell Type</title>
+
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+  <!-- DataTables CSS & JS -->
+  <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
   <h2>Differential Gene Expression Across Cell Types</h2>
-  <p>Search by gene symbol or browse the table below. Negative values indicate downregulation; positive values indicate upregulation.</p>
+  <p>
+    Search by gene symbol or browse the table below. Negative values indicate
+    downregulation; positive values indicate upregulation.
+  </p>
   <table id="geneTable" class="display" width="100%"></table>
 
   <script>
     $(document).ready(function() {
-      $.get('DE_genes_by_celltype.csv', function(data) {
-        const rows = data.split('\n').map(row => row.split(','));
-        const headers = rows[0];
-        const body = rows.slice(1);
+      // Load the NDJSON (one JSON object per line) as text
+      $.get('DE_genes_by_celltype.json', function(text) {
+        // Split into lines, parse each as JSON
+        const data = text
+          .trim()
+          .split('\n')
+          .map(line => JSON.parse(line));
+
+        // Build the columns array from the first object’s keys
+        const columns = Object.keys(data[0]).map(key => ({
+          title: key,
+          data: key
+        }));
+
+        // Initialize DataTable
         $('#geneTable').DataTable({
-          data: body,
-          columns: headers.map(h => ({ title: h })),
+          data: data,
+          columns: columns,
           pageLength: 25,
-          scrollX: true
+          scrollX: true,
+          order: [[0, 'asc']]
         });
+      })
+      .fail(function(jqxhr, status, error) {
+        console.error('Failed to load JSON:', status, error);
+        alert('Error loading data: ' + error);
       });
     });
   </script>
