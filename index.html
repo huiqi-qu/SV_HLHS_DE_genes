@@ -3,52 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Differential Expression by Cell Type</title>
-
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-  <!-- DataTables CSS & JS -->
-  <link rel="stylesheet"
-        href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 </head>
 <body>
   <h2>Differential Gene Expression Across Cell Types</h2>
-  <p>
-    Search by gene symbol or browse the table below. Negative values indicate
-    downregulation; positive values indicate upregulation.
-  </p>
-
+  <p>Search by gene symbol or browse the table below. Negative values indicate downregulation; positive values indicate upregulation.</p>
   <table id="geneTable" class="display" width="100%"></table>
 
   <script>
     $(document).ready(function() {
-      $('#geneTable').DataTable({
-        ajax: {
-          url: 'DE_genes_by_celltype_array.json',
-          dataSrc: ''    // tells DataTables "this is a raw array"
-        },
-        // You can also hard‑code column definitions here if you know them:
-        // columns: [
-        //   { title: 'Gene', data: 'Gene' },
-        //   { title: 'CellType', data: 'CellType' },
-        //   { title: 'log2FoldChange', data: 'log2FoldChange' },
-        //   …etc…
-        // ],
-        // But if you want it fully dynamic:
-        initComplete: function(settings, json) {
-          if (!json || json.length === 0) return;
-          const keys = Object.keys(json[0]);
-          // Build and apply the column headers
-          this.api().settings()[0].aoColumns = keys.map(k => ({
-            sTitle: k, mData: k
-          }));
-          // Re‑draw the table now that columns are defined
-          this.api().clear().rows.add(json).draw();
-        },
-        pageLength: 25,
-        scrollX: true,
-        order: [[0, 'asc']]
+      $.get('DE_genes_by_celltype.csv', function(data) {
+        const rows = data.split('\n').map(row => row.split(','));
+        const headers = rows[0];
+        const body = rows.slice(1);
+        $('#geneTable').DataTable({
+          data: body,
+          columns: headers.map(h => ({ title: h })),
+          pageLength: 25,
+          scrollX: true
+        });
       });
     });
   </script>
