@@ -23,41 +23,32 @@
 
   <script>
     $(document).ready(function() {
-      $.get('DE_genes_by_celltype.json', function(text) {
-        // Trim whitespace
-        text = text.trim();
-
-        let data;
-        if (text.startsWith('[')) {
-          // It's a full JSON array
-          data = JSON.parse(text);
-        } else {
-          // It's NDJSON: one JSON object per line
-          data = text
-            .split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .map(line => JSON.parse(line));
-        }
-
-        // Build columns array from the first object's keys
-        const columns = Object.keys(data[0]).map(key => ({
-          title: key,
-          data: key
-        }));
-
-        // Initialize DataTable
-        $('#geneTable').DataTable({
-          data: data,
-          columns: columns,
-          pageLength: 25,
-          scrollX: true,
-          order: [[0, 'asc']]
-        });
-      })
-      .fail(function(jqxhr, status, error) {
-        console.error('Failed to load JSON:', status, error);
-        alert('Error loading data: ' + error);
+      $('#geneTable').DataTable({
+        ajax: {
+          url: 'DE_genes_by_celltype_array.json',
+          dataSrc: ''    // tells DataTables "this is a raw array"
+        },
+        // You can also hard‑code column definitions here if you know them:
+        // columns: [
+        //   { title: 'Gene', data: 'Gene' },
+        //   { title: 'CellType', data: 'CellType' },
+        //   { title: 'log2FoldChange', data: 'log2FoldChange' },
+        //   …etc…
+        // ],
+        // But if you want it fully dynamic:
+        initComplete: function(settings, json) {
+          if (!json || json.length === 0) return;
+          const keys = Object.keys(json[0]);
+          // Build and apply the column headers
+          this.api().settings()[0].aoColumns = keys.map(k => ({
+            sTitle: k, mData: k
+          }));
+          // Re‑draw the table now that columns are defined
+          this.api().clear().rows.add(json).draw();
+        },
+        pageLength: 25,
+        scrollX: true,
+        order: [[0, 'asc']]
       });
     });
   </script>
