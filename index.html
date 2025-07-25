@@ -18,19 +18,29 @@
     Search by gene symbol or browse the table below. Negative values indicate
     downregulation; positive values indicate upregulation.
   </p>
+
   <table id="geneTable" class="display" width="100%"></table>
 
   <script>
     $(document).ready(function() {
-      // Load the NDJSON (one JSON object per line) as text
       $.get('DE_genes_by_celltype.json', function(text) {
-        // Split into lines, parse each as JSON
-        const data = text
-          .trim()
-          .split('\n')
-          .map(line => JSON.parse(line));
+        // Trim whitespace
+        text = text.trim();
 
-        // Build the columns array from the first object’s keys
+        let data;
+        if (text.startsWith('[')) {
+          // It's a full JSON array
+          data = JSON.parse(text);
+        } else {
+          // It's NDJSON: one JSON object per line
+          data = text
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0)
+            .map(line => JSON.parse(line));
+        }
+
+        // Build columns array from the first object's keys
         const columns = Object.keys(data[0]).map(key => ({
           title: key,
           data: key
